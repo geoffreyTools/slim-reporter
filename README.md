@@ -93,4 +93,4 @@ ava --tap | slim-reporter -- max-width=60
 
 ## Dependencies
 
-This project uses [chalk](https://github.com/chalk/chalk) extensively.
+This project relies on [tap-parser](https://github.com/tapjs/tap-parser) and uses [chalk](https://github.com/chalk/chalk) extensively.
