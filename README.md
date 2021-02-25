@@ -73,13 +73,13 @@ ava --tap | node slim-reporter -- verbose
 ```
 
 ### resize
-
 By default, if you resize the Terminal window, the layout will not be recomputed (banners, text wrap). You can change this with the `resize` option:
 ```json
 ava --tap | node slim-reporter -- resize
 ```
 This option is only recommended when you set up your workspace, because `resize` prevents the output stream from ending.
-### Indentation
+
+### indent
 The default indentation is `2`, you can override it like so:
 ```json
 ava --tap | node slim-reporter -- indent=4
