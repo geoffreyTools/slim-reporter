@@ -1,0 +1,33 @@
+{
+    "name": "slim-reporter",
+    "main": "dist/slim-reporter.cjs",
+    "type": "module",
+    "version": "0.0.1",
+    "description": "A TAP reporter which doesn't take much space in width",
+    "private": true,
+    "scripts": {
+        "build": "rollup --config",
+        "test": "ava --tap | node src/index.js -- verbose theme=dark",
+        "dependencies-audit": "depcruise --config depcruise.json -T dot src | dot -T svg > project-map.svg && npm run dependencies-show",
+        "dependencies-show": "eog -f project-map.svg"
+    },
+    "ava": {
+        "files": [
+            "test/**"
+        ]
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "ava": "^3.15.0",
+        "dependency-cruiser": "^9.23.0",
+        "eslint": "^7.20.0",
+        "rollup": "^2.29.0"
+    },
+    "dependencies": {
+        "chalk": "^4.1.0",
+        "strip-ansi": "^6.0.0",
+        "tap-parser": "^10.1.0"
+    }
+}

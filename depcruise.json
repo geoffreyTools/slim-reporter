@@ -1,0 +1,68 @@
+{
+    "options": {
+        "focus": "^src",
+        "exclude": { "path": "node-modules|utils.js" },
+        "collapse": "chalk|readline-sync|strip-ansi|tap-parser",
+        "reporterOptions": {
+            "dot": {
+                "theme": {
+                    "replace": true,
+                    "graph": {
+                        "splines": "ortho",
+                        "rankdir": "TB",
+                        "overlap": "true",
+                        "style": "filled",
+                        "fillcolor": "#ffffff",
+                        "color" : "black",
+                        "penwidth": "0.4",
+                        "fontname": "monospace",
+                        "fontsize": 8
+                    },
+                    "node": {
+                        "shape": "box",
+                        "style": "filled",
+                        "height": "0",
+                        "color": "transparent",
+                        "penwidth": "0.4",
+                        "fillcolor": "#f6f6aa",
+                        "fontname": "monospace",
+                        "fontsize": 6
+                    },
+                    "edge": {
+                        "arrowhead": "normal",
+                        "arrowsize": "0.5",
+                        "penwidth": "0.7",
+                        "color": "#6677ddaa"
+                    },
+                    "modules": [
+                        {
+                            "criteria": {"source": "\\.json$"},
+                            "attributes": {"shape": "cylinder", "color": "black", "fillcolor": "#ddffee"}
+                        },
+                        {
+                            "criteria": { "orphan": true },
+                            "attributes": { "fontcolor": "#606060", "fillcolor": "#f0f0f0" }
+                        }
+                    ],
+                    "dependencies": [
+                        {
+                            "criteria": {
+                                "resolved": "\\.json$"
+                            },
+                            "attributes": {
+                                "arrowhead": "obox"
+                            }
+                        }, {
+                            "criteria": {
+                                "resolved": "utils.js"
+                            },
+                            "attributes": {
+                                "color": "#ccccee66"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
