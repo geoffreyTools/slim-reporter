@@ -26,7 +26,7 @@ Example with AVA in a `package.json`:
 ```json
 {
     "scripts": {
-        "test": "ava --tap | node slim-reporter"
+        "test": "ava --tap | slim-reporter"
     }
 }
 ```
@@ -50,13 +50,13 @@ Example with AVA in a `package.json`:
 ## Options
 Options can be passed to slim-reporter with `--` like so:
 ```bash
-ava --tap | node slim-reporter -- theme=light verbose resize indent=4
+ava --tap | slim-reporter -- theme=light verbose resize indent=4
 ```
 
 ### theme
 The default theme has a `light` and `dark` variant that you can trigger like so 
 ```json
-ava --tap | node slim-reporter -- theme=light
+ava --tap | slim-reporter -- theme=light
 ```
 You can also create your own theme file with any number of variants.
 - name it `slim-reporter-theme.json`
@@ -69,26 +69,26 @@ By default, the output only includes errors + the summary.
 
 You can add the hierarchical report and logs with the `verbose` option.
 ```json
-ava --tap | node slim-reporter -- verbose
+ava --tap | slim-reporter -- verbose
 ```
 
 ### resize
 By default, if you resize the Terminal window, the layout will not be recomputed (banners, text wrap). You can change this with the `resize` option:
 ```json
-ava --tap | node slim-reporter -- resize
+ava --tap | slim-reporter -- resize
 ```
 This option is only recommended when you set up your workspace, because `resize` prevents the output stream from ending.
 
 ### indent
 The default indentation is `2`, you can override it like so:
 ```json
-ava --tap | node slim-reporter -- indent=4
+ava --tap | slim-reporter -- indent=4
 ```
 
 ### max-width
 You can set a maximum line width in number of columns if you like to stretch your Terminal widow. The banners will stop and the text will wrap at this length.
 ```json
-ava --tap | node slim-reporter -- max-width=60
+ava --tap | slim-reporter -- max-width=60
 ```
 
 ## Dependencies

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import Parser from 'tap-parser';
 import { $pipe, _ } from './utils.js';
 import { Event, passEvent } from './events.js';
