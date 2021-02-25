@@ -85,6 +85,12 @@ The default indentation is `2`, you can override it like so:
 ava --tap | node slim-reporter -- indent=4
 ```
 
+### max-width
+You can set a maximum line width in number of columns if you like to stretch your Terminal widow. The banners will stop and the text will wrap at this length.
+```json
+ava --tap | node slim-reporter -- max-width=60
+```
+
 ## Dependencies
 
 This project uses [chalk](https://github.com/chalk/chalk) extensively.
