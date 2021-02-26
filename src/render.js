@@ -5,13 +5,14 @@ import Report from './components/Report.js';
 import Summary from './components/Summary.js';
 import Failure from './components/Failure.js';
 import Log from './components/Log.js';
-import { id, pipe, $pipe, $$ } from './utils.js';
-const [filter, join, concat] = $$('filter', 'join', 'concat');
+import { id, pipe, $pipe, wrapLine, indent, wrap, $$ } from './utils.js';
+const [filter, join] = $$('filter', 'join');
 
-const layout = pipe(
+const layout = ({ width }) => pipe(
     filter(id),
     join('\n\n'),
-    concat('\n'),
+    indent((process.stdout.columns - width()) / 2 | 0),
+    wrap('\n'),
 );
 
 const render = ({ width, indent, verbose }) => {
@@ -30,5 +31,5 @@ const render = ({ width, indent, verbose }) => {
 };
 
 export default options => state => ({
-    ...state, render: $pipe(state, render(options), layout)
+    ...state, render: $pipe(state, render(options), layout(options))
 });
