@@ -1,8 +1,7 @@
 import ResultsTree from './results/tree.js';
 import { filterResults } from './results/tree.js';
+import { resolvePath } from './results/resolvePath.js';
 import { _ } from './utils.js';
-
-const resolvePath = ({ name }) => name.split(' › ');
 
 export const init = () => ({
     frame: {

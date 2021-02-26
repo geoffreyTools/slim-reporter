@@ -1,0 +1,1 @@
+export const resolvePath = ({ name }) => name.split(' › ');
