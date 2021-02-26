@@ -47,23 +47,24 @@ const diagnosis = (title, origin) => (text, details) =>
     ].filter(id).join('\n')
 ;
 
-const format = (indent) => (line, i, arr) =>
-    spaces(i * indent)
+const format = (indentBy, wrapLine) => (line, i, arr) =>
+    indentBy(i)
     + icons.fail
-    + ' ' + entryStyle(i, i === arr.length - 1)(line) + '\n'
+    + ' ' + wrapLine(entryStyle(i, i === arr.length - 1, line)).join('\n') + '\n'
 ;
 
-const cascade = _(indent => pipe(
+const cascade = _(indentBy => wrapLine => pipe(
     split(' › '),
-    map(format(indent)),
-    join('')
+    map(format(indentBy, wrapLine)),
+    join(''),
 ));
 
 
-export default _(title => indent => map(
+export default _(title => indent => wrapLine => map(
     ({ name, diag }) => {
+        const indentBy = n => spaces(n * indent);
         return diag
-        ? diagnosis(title, cascade(indent))(name, diag)
-        : title(bg.fail, 'Error') + wrap('\n')(cascade(indent, name))
+        ? diagnosis(title, cascade(indentBy, wrapLine))(name, diag)
+        : title(bg.fail, 'Error') + wrap('\n')(cascade(indentBy, wrapLine, name))
     }
 ));
