@@ -1,7 +1,7 @@
 import stripAnsi from 'strip-ansi';
 import chalk from 'chalk';
 import theme from './theme.js';
-import { pipe, $ } from '../utils.js';
+import { pipe, $, _ } from '../utils.js';
 const replace = $('replace');
 
 export const hasStyle = x => x !== stripAnsi(x);
@@ -51,7 +51,7 @@ export const syntaxColor = pipe(
     colors.word
 );
 
-export const entryStyle = (level, isLeaf) => text =>
+export const entryStyle = _(level => isLeaf => text =>
     isLeaf
     ? text
     : level === 0
@@ -59,4 +59,4 @@ export const entryStyle = (level, isLeaf) => text =>
     : level === 1
     ? underline(text)
     : text
-;
+);
