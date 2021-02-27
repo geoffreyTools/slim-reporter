@@ -1,6 +1,6 @@
 import { icons, bg, syntaxColor, entryStyle } from '../looks/style.js';
-import {id, splitJoin, wrap, prop, pipe, $pipe, indent, spaces, $$, _ } from '../utils.js';
-const [slice, replace, join, map, split] = $$('slice', 'replace', 'join', 'map', 'split');
+import {id, splitJoin, wrap, prop, pipe, indent, spaces, $$, _ } from '../utils.js';
+const [replace, join, map] = $$('replace', 'join', 'map');
 
 const style = _(type => pipe(
     syntaxColor,
