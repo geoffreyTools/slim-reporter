@@ -7,6 +7,8 @@ This TAP reporter was designed to:
 - have a strong visual structure
 - display a hierarchical view of test results
 
+It was only tested with AVA, which outputs TAP version 13 with the `--tap` flag. I noticed the TAP report lacked details with some types of errors (missing tests, syntax error outside of a test, etc.). I used heuristics to reconstruct the missing information.
+
 ## How it looks
 I have run the tests serially with a delay to produce this animation. Note that the hierarchical view supports concurrent tests. It was one of the motivations for this reporter.
 
