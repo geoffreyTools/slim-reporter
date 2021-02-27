@@ -5,9 +5,9 @@ const join = $('join');
 const layout = _(Title => pipe(
     report => [
         Title(bg.info, 'Test Report'),
-        report.replace(/^\n{2}/, '\n')
+        report.replace(/^\n*/, '')
     ],
-    join('\n'),
+    join('\n\n'),
 ));
 
 export default _(Entries => Title => pipe(

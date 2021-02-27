@@ -3,8 +3,10 @@ import { id, pipe, either, $$, _ } from '../utils.js';
 const [map, join] = $$('map', 'join');
 
 const layout = title => pipe(
-    ({ origin, message }) => [title, origin, message],
-    join('\n')
+    ({ origin, message }) => [
+        title, [origin, message].join('\n')
+    ],
+    join('\n\n')
 );
 
 const formatMessage = either(isJSONLike, syntaxColor, id);
