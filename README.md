@@ -86,7 +86,7 @@ ava --tap | slim-reporter indent=4
 ```
 
 ### max-width
-You can set a maximum line width in number of columns if you like to stretch your Terminal widow. The banners will stop and the text will wrap at this length.
+You can set a maximum line width in number of columns if you like to stretch your Terminal window. The banners will stop and the text will wrap at this length.
 ```json
 ava --tap | slim-reporter max-width=60
 ```
