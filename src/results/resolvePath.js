@@ -1,1 +1,1 @@
-export const resolvePath = ({ name }) => name.split(' › ');
+export const resolvePath = name => name.split(' › ');
