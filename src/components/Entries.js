@@ -1,20 +1,5 @@
-import { wrapLine, spaces, last, init, empty, $$ } from '../utils.js';
-import { icons, entryStyle } from '../looks/style.js';
+import { pipe, last, init, empty, $$ } from '../utils.js';
 const [map, reduce, flatMap, join] = $$('map', 'reduce', 'flatMap', 'join');
-
-const layout = indent => ({ level, status }) => (line, i) =>
-    i !== 0 ? line
-    : indent(level) + icons[status] + ' ' + line
-;
-
-const formatEntry = (wrap, layout) => entry =>
-    entry.text
-    |> entryStyle(entry.level, entry.isLeaf)
-    |> wrap(entry.level)
-    |> map(layout(entry))
-;
-
-const formatEntries = (...xs) => flatMap(formatEntry(...xs));
 
 const belongsToNextSuite = (groups, entry) => {
     const lastEntry = last(last(groups));
@@ -30,14 +15,10 @@ const groupBySuite = reduce((groups, entry) =>
     : [...init(groups), [...last(groups), entry]]
 , []);
 
-export default (width, indent) => entries => {
-    const indentBy = n => spaces(n * indent);
-    const wrap = level => wrapLine(width, level * indent + 2);
+export default Entry => pipe(
+    groupBySuite,
+    map(flatMap(Entry)),
+    map(join('\n')),
+    join('\n\n')
+);
 
-    return entries
-        |> groupBySuite
-        |> map(formatEntries(wrap, layout(indentBy)))
-        |> map(join('\n'))
-        |> join('\n\n')
-    ;
-};
