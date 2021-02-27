@@ -1,4 +1,5 @@
 import { icons, bg, syntaxColor, entryStyle } from '../looks/style.js';
+import { resolvePath } from '../results/resolvePath.js';
 import {id, splitJoin, wrap, prop, pipe, indent, spaces, $$, _ } from '../utils.js';
 const [replace, join, map] = $$('replace', 'join', 'map');
 
@@ -54,7 +55,7 @@ const format = (indentBy, wrapLine) => (line, i, arr) =>
 ;
 
 const cascade = _(indentBy => wrapLine => pipe(
-    split(' › '),
+    resolvePath,
     map(format(indentBy, wrapLine)),
     join(''),
 ));
