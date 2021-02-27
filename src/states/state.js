@@ -1,7 +1,7 @@
-import ResultsTree from './results/tree.js';
-import { filterResults } from './results/tree.js';
-import { resolvePath } from './results/resolvePath.js';
-import { _ } from './utils.js';
+import ResultsTree from '../results/tree.js';
+import { resolvePath } from '../results/resolvePath.js';
+import Failure from './Failure.js';
+import * as Log from './Log.js';
 
 export const init = () => ({
     frame: {
@@ -9,7 +9,7 @@ export const init = () => ({
         needsUpdate: false,
         write_lock: false,
         elapsed: 0,
-        resultsTree: ResultsTree(resolvePath),
+        resultsTree: ResultsTree(({ name }) => resolvePath(name)),
         results: [],
         logs: [],
         failures: [],
@@ -24,37 +24,31 @@ export const mutate = store => state => {
     return state;
 };
 
-const computeLog = _(results => log => ({
-    ...log, subset: filterResults(results, log.path)
-}));
-
-const assocPath = _(log => ({
-    ...log, path: resolvePath(log.result)
-}));
 
 const updateLogs = ({ results, logs, event }) =>
     event.is('log')
-    ? [...logs, assocPath(event.value)]
+    ? [...logs, Log.assocPath(event.value)]
     : event.is('complete')
-    ? logs.map(computeLog(results))
+    ? logs.map(Log.computeEntries(results))
     : logs
 ;
 
-const updateFailures = ({ failures, event }) =>
-    event.is('fail')
-    ? [...failures, event.value]
-    : failures
-;
-
-const updateResults = ({ resultsTree, event }) => {
+const updateResults = ({ failures, resultsTree, event }) => {
     if (!event.is('result')) return {};
 
-    const newTree = resultsTree.push(event.value);
+    const { value } = event;
+
+    const failure = Failure(value);
+
+    const newTree = resultsTree.push(
+        failure && failure.result || value
+    );
 
     return {
         resultsTree: newTree,
         results: newTree.entries(),
-    }
+        failures: failure ? [...failures, failure] : failures
+    };
 };
 
 const updateElapsed = ({ elapsed }) =>
@@ -86,7 +80,6 @@ export const update = state => ({
     ...state,
     ...updateResults(state),
     logs: updateLogs(state),
-    failures: updateFailures(state),
     elapsed: updateElapsed(state),
     summary: updateSummary(state),
     needsUpdate: updateNeedsUpdate(state),

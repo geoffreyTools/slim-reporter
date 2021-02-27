@@ -4,7 +4,7 @@ import Parser from 'tap-parser';
 import { _ } from './utils.js';
 import { Event, passEvent } from './events.js';
 import logEvent from './logEvent.js';
-import { init, update, mutate } from './state.js';
+import { init, update, mutate } from './states/state.js';
 import render from './render.js';
 import print from './io/print.js';
 import resize from './io/resize.js';

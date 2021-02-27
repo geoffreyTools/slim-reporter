@@ -1,9 +1,10 @@
+import Entry from './components/Entry.js';
 import Entries from './components/Entries.js';
 import Title from './components/Title.js';
 import Loading from './components/Loading.js';
 import Report from './components/Report.js';
 import Summary from './components/Summary.js';
-import Failure from './components/Failure.js';
+import Failures from './components/Failures.js';
 import Log from './components/Log.js';
 import { id, pipe, wrapLine, indent, wrap, $$ } from './utils.js';
 const [filter, join] = $$('filter', 'join');
@@ -16,14 +17,15 @@ const layout = ({ width }) => pipe(
 );
 
 const render = ({ width, indent, verbose }) => {
-    const $Entries = Entries(width, indent);
+    const $Entry = Entry(width(), indent);
+    const $Entries = Entries($Entry);
     const $Title = Title({width});
-    const $wrapLine = wrapLine(width(), indent)
+    const $simpleWrap = wrapLine(width(), 0);
 
     return state => [
         verbose && Report($Entries, $Title, state.results),
         state.summary && [
-            Failure($Title, indent, $wrapLine, state.failures),
+            Failures($Entries, $Title, $simpleWrap, state.failures),
             verbose && Log($Entries, $Title, state.logs),
             Summary($Title, state.summary)
         ],

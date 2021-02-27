@@ -8,6 +8,11 @@ export const prop = p => a => a[p];
 export const defined = x => x !== undefined;
 export const hasProp = _(p => pipe(prop(p), defined));
 export const either = _(p => t => f => x => p(x) ? t(x) : f(x));
+export const or = _(f => g => x => f(x) || g(x));
+export const head = ([x]) => x;
+export const last = arr => arr[arr.length -1];
+export const init = arr => arr.slice(0, -1);
+export const empty = arr => !arr.length;
 export const not = f => (...xs) => !f(...xs);
 
 export const $ = method => (...args) => a => {
@@ -48,7 +53,7 @@ export const wrapLine = _(max => indentation => str => {
         ;
         if (length > max) lines[++current] = '';
 
-        return lines[current] += ' ' + word
+        lines[current] += ' ' + word
     });
 
     return lines
