@@ -2,7 +2,6 @@ export const id = x => x;
 const compose = (f, g) => x => f(g(x));
 const apply = (f, x) => f(x);
 export const pipe = (...fs) => fs.reduceRight(compose, id);
-export const $pipe = (...fs) => pipe(...fs.slice(1))(fs[0]);
 export const _ = f => (x, ...xs) => xs.reduce(apply, f(x));
 export const eq = a => b => a === b;
 export const prop = p => a => a[p];

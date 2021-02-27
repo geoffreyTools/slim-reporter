@@ -5,7 +5,7 @@ import Report from './components/Report.js';
 import Summary from './components/Summary.js';
 import Failure from './components/Failure.js';
 import Log from './components/Log.js';
-import { id, pipe, $pipe, wrapLine, indent, wrap, $$ } from './utils.js';
+import { id, pipe, wrapLine, indent, wrap, $$ } from './utils.js';
 const [filter, join] = $$('filter', 'join');
 
 const layout = ({ width }) => pipe(
@@ -32,5 +32,6 @@ const render = ({ width, indent, verbose }) => {
 };
 
 export default options => state => ({
-    ...state, render: $pipe(state, render(options), layout(options))
+    ...state,
+    render: state |> render(options) |> layout(options)
 });

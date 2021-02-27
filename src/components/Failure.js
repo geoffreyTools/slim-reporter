@@ -21,7 +21,7 @@ const messageDetails = values =>
     ? ''
     : difference(values)
     ? render(difference(values))
-    : $pipe(values, Object.values, join('/n'), indent(3), syntaxColor)
+    : values |> Object.values |> join('/n') |> indent(3) |> syntaxColor
 ;
 
 const messageSummary = (message, values) =>

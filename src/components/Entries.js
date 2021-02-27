@@ -4,9 +4,9 @@ const [map, flatMap, join] = $$('map', 'flatMap', 'join');
 
 const wrap = (width, indent) => level => wrapLine(width, level * indent + 2)
 
-const entryLayout = indent => entry => (text, line) => {
+const entryLayout = indentBy => entry => (text, line) => {
     const { level, isLeaf, status } = entry;
-    const indentation = spaces(level * indent);
+    const indentation = indentBy(level);
     const bullet = icons[status];
     const spaceAbove = (level === 0 && !isLeaf) ? '\n' : '';
     return line === 0
@@ -26,10 +26,13 @@ const formatEntries = (wrap, layout) => xs =>
     flatMap(formatEntry(wrap, layout))(xs)
 ;
 
-export default (width, indent) => pipe(
-    formatEntries(
-        wrap(width(), indent),
-        entryLayout(indent)
-    ),
-    join('\n')
-);
+export default (width, indent) => entries => {
+    const indentBy = n => spaces(n * indent);
+    return entries
+        |> formatEntries(
+            wrap(width(), indent),
+            entryLayout(indentBy)
+        )
+        |> join('\n')
+    ;
+}

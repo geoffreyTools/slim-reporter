@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import Parser from 'tap-parser';
-import { $pipe, _ } from './utils.js';
+import { _ } from './utils.js';
 import { Event, passEvent } from './events.js';
 import logEvent from './logEvent.js';
 import { init, update, mutate } from './state.js';
@@ -14,14 +14,12 @@ import * as options from './options.js';
 const store = init();
 
 const main = state =>
-    $pipe(
-        state,
-        update,
-        render(options),
-        mutate(store),
-        print(event),
-        release(clock)
-    )
+    state
+    |> update
+    |> render(options)
+    |> mutate(store)
+    |> print(event)
+    |> release(clock)
 ;
 
 const parser = new Parser();
