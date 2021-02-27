@@ -1,15 +1,17 @@
 {
     "name": "slim-reporter",
-    "main": "./src/index.js",
+    "main": "./dist/slim-reporter.js",
     "bin": {
-        "slim-reporter": "./src/index.js"
+        "slim-reporter": "./dist/slim-reporter.js"
     },
     "type": "module",
     "version": "0.0.2",
     "description": "A TAP reporter which doesn't take much space in width",
     "private": true,
     "scripts": {
-        "test": "ava --tap | node src/index.js -- verbose theme=dark",
+        "build": "rollup --config",
+        "watch": "rollup --config --watch",
+        "test": "ava --tap | node ./dist/slim-reporter.js max-width=60 verbose",
         "dependencies-audit": "depcruise --config depcruise.json -T dot src | dot -T svg > project-map.svg && npm run dependencies-show",
         "dependencies-show": "eog -f project-map.svg"
     },
@@ -22,9 +24,15 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@babel/core": "^7.13.8",
+        "@babel/eslint-parser": "^7.13.8",
+        "@babel/plugin-proposal-pipeline-operator": "^7.12.13",
+        "@rollup/plugin-babel": "^5.3.0",
         "ava": "^3.15.0",
         "dependency-cruiser": "^9.23.0",
-        "eslint": "^7.20.0"
+        "eslint": "^7.20.0",
+        "rollup": "^2.40.0",
+        "rollup-plugin-preserve-shebang": "^1.0.1"
     },
     "dependencies": {
         "chalk": "^4.1.0",
