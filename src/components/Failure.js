@@ -12,7 +12,7 @@ const render = pipe(
     splitJoin(map(line => line && style(line[0], line)), '\n')
 );
 
-const coordOf = replace(/^[^0-9]*/, ''); splitJoin(slice(-2), ':');
+const coordOf = replace(/^.+(?:\..*js).*?:/, '');
 
 const difference = prop('Difference:');
 
