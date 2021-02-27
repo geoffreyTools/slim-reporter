@@ -16,9 +16,7 @@ const format = Entries => ({ subset, message }) => {
     return { origin, message: formatMessage(message) };
 };
 
-export default _(Entries => Title => pipe(
-    map(pipe(
-        format(Entries),
-        layout(Title(bg.log, 'Log'))
-    )),
-));
+export default _(Entries => Title => map(pipe(
+    format(Entries),
+    layout(Title(bg.log, 'Log'))
+)));
