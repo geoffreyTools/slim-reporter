@@ -1,4 +1,4 @@
-import { hasProp, either, pipe, eq, $ } from '../utils.js';
+import { hasProp, either, eq, $ } from '../utils.js';
 const map = $('map');
 
 const reduceStatus = xs =>
@@ -22,9 +22,9 @@ const getStatus = searchChild => either(
 );
 
 export const statusOf = getStatus(
-    childNode => pipe(
-        Object.values,
-        map(getStatus(statusOf)),
-        reduceStatus
-    )(childNode)
+    childNode =>
+    childNode
+    |> Object.values
+    |> map(getStatus(statusOf))
+    |> reduceStatus
 );
