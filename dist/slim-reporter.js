@@ -678,7 +678,6 @@ parser.on('comment', register('comment'));
 parser.on('complete', register('complete'));
 parser.on('result', register('result'));
 parser.on('complete', event('complete'));
-parser.on('fail', event('fail'));
 resize(resize$1, event('resize'));
 const clock = Clock(event('clock'), 120);
 
