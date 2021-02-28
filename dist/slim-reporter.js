@@ -17,7 +17,7 @@ const prop = p => a => a[p];
 const defined = x => x !== undefined;
 const hasProp = _(p => pipe(prop(p), defined));
 const either = _(p => t => f => x => p(x) ? t(x) : f(x));
-const last$2 = arr => arr[arr.length - 1];
+const last$1 = arr => arr[arr.length - 1];
 const init$1 = arr => arr.slice(0, -1);
 const empty = arr => !arr.length;
 const not = f => (...xs) => !f(...xs);
@@ -25,23 +25,13 @@ const $ = method => (...args) => a => {
   if (!a || !a[method]) throw new Error(`${a} doesn't have a method ${method}`);
   return a[method](...args);
 };
-const map$5 = f => a => Array.isArray(a) ? a.map(f) : Object.fromEntries(Object.entries(a).map(f));
+const map$6 = f => a => Array.isArray(a) ? a.map(f) : Object.fromEntries(Object.entries(a).map(f));
 const $$ = (...xs) => xs.map($);
 const repeat = _(s => n => Array(n).fill(s).join(''));
 const spaces = repeat(' ');
 const wrap = (before, after = before) => x => before + x + after;
 const splitJoin = (f, s1, s2 = s1) => str => f(str.split(s1)).join(s2);
 const indent$1 = _(n => splitJoin(xs => xs.map(x => spaces(n) + x), '\n'));
-const wrapLine = _(max => indentation => str => {
-  const lines = [''];
-  let current = 0;
-  str.split(' ').forEach(word => {
-    const length = word.length + indentation + lines[current].length;
-    if (length > max) lines[++current] = '';
-    lines[current] += ' ' + word;
-  });
-  return lines.map(x => x.trim()).map((x, i) => !i ? x : spaces(indentation) + x);
-});
 const safe = f => {
   let out;
 
@@ -111,7 +101,7 @@ var logEvent = ((send, source) => value => {
   }
 });
 
-const map$4 = $('map');
+const map$5 = $('map');
 
 const reduceStatus = xs => xs.every(eq('pass')) ? 'pass' : xs.find(eq('fail')) ? 'fail' : xs.every(eq('todo')) ? 'todo' : xs.every(eq('skip')) ? 'skip' : 'mixed';
 
@@ -122,10 +112,10 @@ const getStatus = searchChild => either(isLeaf$1, x => x.skip ? 'skip' : x.todo 
 const statusOf = getStatus(childNode => {
   var _ref, _ref2, _childNode;
 
-  return _ref = (_ref2 = (_childNode = childNode, Object.values(_childNode)), map$4(getStatus(statusOf))(_ref2)), reduceStatus(_ref);
+  return _ref = (_ref2 = (_childNode = childNode, Object.values(_childNode)), map$5(getStatus(statusOf))(_ref2)), reduceStatus(_ref);
 });
 
-const [find, reduce$1] = $$('find', 'reduce');
+const [find, reduce$2] = $$('find', 'reduce');
 
 const push = (path, result, node, index = 0) => {
   const name = path[index];
@@ -152,9 +142,9 @@ const flattenBranches = level => ([text, node]) => {
 
 const fold = (node, level = 0) => Object.entries(node).flatMap(flattenBranches(level));
 
-const last$1 = arr => arr[arr.length - 1];
+const last = arr => arr[arr.length - 1];
 
-const getLastResult = node => !isLeaf(node) ? getLastResult(last$1(Object.entries(node))) : node;
+const getLastResult = node => !isLeaf(node) ? getLastResult(last(Object.entries(node))) : node;
 
 const ResultsTree = (pathResolver, root = {}) => ({
   root,
@@ -168,7 +158,7 @@ const findResult = (name, i) => find(({
   text
 }) => level === i && name === text);
 
-const filterResults = _(results => reduce$1((acc, name, i) => [...acc, findResult(name, i)(results)], []));
+const filterResults = _(results => reduce$2((acc, name, i) => [...acc, findResult(name, i)(results)], []));
 
 const resolvePath = name => name.split(' › ');
 
@@ -305,8 +295,8 @@ const update = state => ({ ...state,
   end: updateEnd(state)
 });
 
-const split = $('split');
-const options = process.argv.slice(2).map(split('=')).reduce((acc, [key, val]) => {
+const split$1 = $('split');
+const options = process.argv.slice(2).map(split$1('=')).reduce((acc, [key, val]) => {
   acc[key] = defined(val) ? val : true;
   return acc;
 }, {});
@@ -381,7 +371,7 @@ const getUserTheme = () => JSON.parse(readFileSync('./slim-reporter-theme.json',
   flag: 'r'
 }));
 
-const readColors = _(model => map$5(([key, value]) => [key, chalk[model](...value)]));
+const readColors = _(model => map$6(([key, value]) => [key, chalk[model](...value)]));
 
 const readVariant = (d, {
   text,
@@ -401,12 +391,12 @@ const readVariant = (d, {
 
 const readTheme = _(dfault => pipe(theme => theme ? { ...dfault,
   ...theme
-} : dfault, map$5(([name, variant]) => [name, readVariant(dfault[name] || emptyVariant, variant)])));
+} : dfault, map$6(([name, variant]) => [name, readVariant(dfault[name] || emptyVariant, variant)])));
 
 const theme = readTheme(defaultDescription, safe(getUserTheme));
 var theme$1 = theme[themeVariant] || theme.dark;
 
-const replace$1 = $('replace');
+const [replace$1, split, reduce$1, map$4] = $$('replace', 'split', 'reduce', 'map');
 const hasStyle = x => x !== stripAnsi(x);
 const length = text => stripAnsi(text).length;
 const colors = theme$1.text;
@@ -431,9 +421,9 @@ const match = reg => str => {
   return matches && matches[1];
 };
 
-const first = match(/^\s*(\S)/);
-const last = match(/(\S)\s*$/);
 const isJSONLike = str => {
+  const first = match(/^\s*(\S)/);
+  const last = match(/(\S)\s*$/);
   const startBrackets = ['[', '{'];
   const endBrackets = {
     '[': ']',
@@ -443,6 +433,18 @@ const isJSONLike = str => {
 };
 const syntaxColor = pipe(replace$1(/(\{|\}|\[|\])/g, colors.braces('$1')), replace$1(/( \d+)/g, colors.digit('$1')), replace$1(/( \w+:)/g, colors.default('$1')), replace$1(/,/g, colors.default(',')), colors.word);
 const entryStyle = _(level => isLeaf => text => isLeaf ? text : level === 0 ? bold(text) : level === 1 ? underline(text) : text);
+const wrapLine = _(max => indent => str => {
+  var _ref, _ref2, _ref3, _str;
+
+  const separators = /[ /;:,.-]/g;
+  const match = str.match(separators);
+  return _ref = (_ref2 = (_ref3 = (_str = str, split(separators)(_str)), reduce$1((lines, word, i) => {
+    const latest = last$1(lines);
+    const len = length(word) + indent + length(latest) + 1;
+    const next = word + (match && match[i] || '');
+    return len > max ? [...lines, next] : [...init$1(lines), latest + next];
+  }, [''])(_ref3)), map$4(x => x.trimEnd())(_ref2)), map$4((x, i) => !i ? x : spaces(indent) + x)(_ref);
+});
 
 const [map$3, join$6] = $$('map', 'join');
 
@@ -452,29 +454,29 @@ const layout$3 = indent => ({
 }) => (line, i) => i !== 0 ? line : indent(level) + icons[status] + ' ' + line;
 
 const formatEntry = (wrap, layout) => entry => {
-  var _ref, _ref2, _entry$text;
+  var _ref, _ref2, _ref3, _entry$text;
 
-  return _ref = (_ref2 = (_entry$text = entry.text, entryStyle(entry.level, entry.isLeaf)(_entry$text)), wrap(entry.level)(_ref2)), map$3(layout(entry))(_ref);
+  return _ref = (_ref2 = (_ref3 = (_entry$text = entry.text, entryStyle(entry.level, entry.isLeaf)(_entry$text)), wrap(entry.level)(_ref3)), map$3(layout(entry))(_ref2)), join$6('\n')(_ref);
 };
 
-var Entry = ((width, indent) => entry => {
-  var _ref3, _entry;
+var Entry = ((indent, wrapLine) => entry => {
+  var _entry;
 
   const indentBy = n => spaces(n * indent);
 
-  const wrap = level => wrapLine(width, level * indent + 2);
+  const wrap = level => wrapLine(level * indent + 2);
 
-  return _ref3 = (_entry = entry, formatEntry(wrap, layout$3(indentBy))(_entry)), join$6('\n')(_ref3);
+  return _entry = entry, formatEntry(wrap, layout$3(indentBy))(_entry);
 });
 
 const [map$2, reduce, flatMap, join$5] = $$('map', 'reduce', 'flatMap', 'join');
 
 const belongsToNextSuite = (groups, entry) => {
-  const lastEntry = last$2(last$2(groups));
+  const lastEntry = last$1(last$1(groups));
   return entry.level < lastEntry.level || !entry.isLeaf && lastEntry.isLeaf;
 };
 
-const groupBySuite = reduce((groups, entry) => empty(groups) ? [[entry]] : belongsToNextSuite(groups, entry) ? [...groups, [entry]] : [...init$1(groups), [...last$2(groups), entry]], []);
+const groupBySuite = reduce((groups, entry) => empty(groups) ? [[entry]] : belongsToNextSuite(groups, entry) ? [...groups, [entry]] : [...init$1(groups), [...last$1(groups), entry]], []);
 var Entries = (Entry => pipe(groupBySuite, map$2(flatMap(Entry)), map$2(join$5('\n')), join$5('\n\n')));
 
 const _title = (color, width, text = '') => {
@@ -483,9 +485,7 @@ const _title = (color, width, text = '') => {
   return color(space + text + space);
 };
 
-var Title = (({
-  width
-}) => _(color => text => {
+var Title = ((width, wrapLine) => _(color => text => {
   const render = text => _title(color, width(), text);
 
   return hasStyle(text) ? render(text) : wrapLine(width() - 1, 1, text).map(render).join('\n');
@@ -518,16 +518,19 @@ var Summary = _(Title => summary => Title(bg.info, render$2(summary)));
 
 const [replace, join$2, map$1] = $$('replace', 'join', 'map');
 const difference = prop('Difference:');
+
+const extractAt = diag => !diag.at ? null : diag.at.split('\n');
+
+const multiline = arr => arr.length > 1;
+
 const coordOf = replace(/^.+(?:\..*js).*?:/, '');
 
 const bannerText = ({
   name,
-  assertion,
-  at
-}) => {
+  assertion
+}, at) => {
   const detail = assertion && wrap('(', ')')(assertion);
-  const location = at && `at ${coordOf(at)}`;
-  return [name, detail, location].filter(id).join(' ');
+  return [name, detail, at].filter(id).join(' ');
 };
 
 const DiffFailure = values => {
@@ -546,14 +549,16 @@ const DiffFailure = values => {
 const DetailedFailure = (message, values, wrapLine) => {
   var _ref5, _ref6, _ref7, _ref8, _ref9, _ref10, _values2;
 
-  const details = (_ref5 = (_ref6 = (_ref7 = (_ref8 = (_ref9 = (_ref10 = (_values2 = values, Object.values(_values2)), join$2('/n')(_ref10)), wrapLine(_ref9)), join$2('/n')(_ref8)), indent$1(3)(_ref7)), syntaxColor(_ref6)), '\n' + _ref5);
+  const details = (_ref5 = (_ref6 = (_ref7 = (_ref8 = (_ref9 = (_ref10 = (_values2 = values, Object.values(_values2)), join$2('/n')(_ref10)), wrapLine(0)(_ref9)), join$2('/n')(_ref8)), indent$1(3)(_ref7)), syntaxColor(_ref6)), '\n' + _ref5);
   return message + ':\n' + details;
 };
 
 const LaconicFailure = (message, wrapLine) => {
-  var _ref11, _message;
+  var _message;
 
-  return (_ref11 = (_message = message, wrapLine(_message)), join$2('\n')(_ref11)) + '.';
+  const nbsp = '\xa0';
+  const formatMessage = pipe(x => bold('“') + nbsp + x + nbsp + bold('”'), wrapLine(2), join$2('\n'));
+  return _message = message, either(isJSONLike, id, formatMessage)(_message);
 };
 
 const Failure = ({
@@ -561,10 +566,21 @@ const Failure = ({
   values
 }, wrapLine) => !values ? LaconicFailure(message, wrapLine) : difference(values) ? DiffFailure(values) : DetailedFailure(message, values, wrapLine);
 
-var Failures = _(Entries => Title => wrapLine => map$1(({
+const atInBanner = at => at && !multiline(at) ? `at ${coordOf(at[0])}` : null;
+
+const atInText = (indentation, wrapLine, at) => {
+  var _ref11, _ref12, _ref13, _at;
+
+  return at && multiline(at) ? `at:\n${(_ref11 = (_ref12 = (_ref13 = (_at = at, map$1(x => '- ' + x)(_at)), map$1(pipe(wrapLine(indentation), join$2('\n')))(_ref13)), join$2('\n')(_ref12)), indent$1(indentation)(_ref11))}\n` : null;
+};
+
+var Failures = _(Entries => Title => wrapLine => indentation => map$1(({
   result,
   entries
-}) => [Title(bg.fail, bannerText(result.diag)), wrap('\n')(Entries(entries)), Failure(result.diag, wrapLine)].join('\n')));
+}) => {
+  const at = extractAt(result.diag);
+  return [Title(bg.fail, bannerText(result.diag, atInBanner(at))), wrap('\n')(Entries(entries)), atInText(indentation, wrapLine, at), Failure(result.diag, wrapLine)].filter(id).join('\n');
+}));
 
 const [map, join$1] = $$('map', 'join');
 
@@ -599,13 +615,11 @@ const render = ({
   indent,
   verbose
 }) => {
-  const $Entry = Entry(width(), indent);
+  const $partialWrap = wrapLine(width());
+  const $Entry = Entry(indent, $partialWrap);
   const $Entries = Entries($Entry);
-  const $Title = Title({
-    width
-  });
-  const $simpleWrap = wrapLine(width(), 0);
-  return state => [verbose && Report($Entries, $Title, state.results), state.summary && [Failures($Entries, $Title, $simpleWrap, state.failures), verbose && Log($Entries, $Title, state.logs), Summary($Title, state.summary)], !state.summary && Loading(state.elapsed)].flat(2);
+  const $Title = Title(width, wrapLine);
+  return state => [verbose && Report($Entries, $Title, state.results), state.summary && [Failures($Entries, $Title, $partialWrap, indent, state.failures), verbose && Log($Entries, $Title, state.logs), Summary($Title, state.summary)], !state.summary && Loading(state.elapsed)].flat(2);
 };
 
 var render$1 = (options => state => {
