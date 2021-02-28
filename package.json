@@ -29,6 +29,7 @@
         "@babel/plugin-proposal-pipeline-operator": "^7.12.13",
         "@rollup/plugin-babel": "^5.3.0",
         "ava": "^3.15.0",
+        "ava-babel-wrapper": "git+https://github.com/geoffreyTools/ava-babel-wrapper.git",
         "dependency-cruiser": "^9.23.0",
         "eslint": "^7.20.0",
         "rollup": "^2.40.0",

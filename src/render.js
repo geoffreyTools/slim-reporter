@@ -18,15 +18,15 @@ const layout = ({ width }) => pipe(
 );
 
 const render = ({ width, indent, verbose }) => {
-    const $Entry = Entry(width(), indent);
+    const $partialWrap = wrapLine(width());
+    const $Entry = Entry(indent, $partialWrap);
     const $Entries = Entries($Entry);
-    const $Title = Title({width});
-    const $simpleWrap = wrapLine(width(), 0);
+    const $Title = Title(width, wrapLine);
 
     return state => [
         verbose && Report($Entries, $Title, state.results),
         state.summary && [
-            Failures($Entries, $Title, $simpleWrap, state.failures),
+            Failures($Entries, $Title, $partialWrap, indent, state.failures),
             verbose && Log($Entries, $Title, state.logs),
             Summary($Title, state.summary)
         ],
