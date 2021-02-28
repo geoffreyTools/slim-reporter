@@ -1,5 +1,5 @@
 import { hasStyle, length } from '../looks/style.js';
-import { spaces, wrapLine, _ } from '../utils.js';
+import { spaces, _ } from '../utils.js';
 
 const _title = (color, width, text='') => {
     const w = Math.max(2, width - length(text));
@@ -7,7 +7,7 @@ const _title = (color, width, text='') => {
     return color(space + text + space);
 }
 
-export default ({ width }) => _(color => text => {
+export default (width, wrapLine) => _(color => text => {
     const render = text => _title(color, width(), text);
 
     return hasStyle(text)

@@ -42,26 +42,6 @@ export const indent = _(n =>
     splitJoin(xs => xs.map(x => spaces(n) + x), '\n')
 );
 
-export const wrapLine = _(max => indentation => str => {
-    const lines = [''];
-    let current = 0;
-
-    str.split(' ').forEach(word => {
-        const length = word.length
-            + indentation
-            + lines[current].length
-        ;
-        if (length > max) lines[++current] = '';
-
-        lines[current] += ' ' + word
-    });
-
-    return lines
-        .map(x => x.trim())
-        .map((x, i) => !i ? x : spaces(indentation) + x)
-    ;
-});
-
 export const safe = f => {
     let out;
     try {

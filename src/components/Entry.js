@@ -1,4 +1,4 @@
-import { wrapLine, spaces, $$ } from '../utils.js';
+import { spaces, $$ } from '../utils.js';
 import { icons, entryStyle } from '../looks/style.js';
 const [map, join] = $$('map', 'join');
 
@@ -12,14 +12,12 @@ const formatEntry = (wrap, layout) => entry =>
     |> entryStyle(entry.level, entry.isLeaf)
     |> wrap(entry.level)
     |> map(layout(entry))
+    |> join('\n')
 ;
 
-export default (width, indent) => entry => {
+export default (indent, wrapLine) => entry => {
     const indentBy = n => spaces(n * indent);
-    const wrap = level => wrapLine(width, level * indent + 2);
+    const wrap = level => wrapLine(level * indent + 2);
 
-    return entry
-        |> formatEntry(wrap, layout(indentBy))
-        |> join('\n')
-    ;
+    return entry |> formatEntry(wrap, layout(indentBy));
 };

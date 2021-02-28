@@ -1,8 +1,8 @@
 import stripAnsi from 'strip-ansi';
 import chalk from 'chalk';
 import theme from './theme.js';
-import { pipe, $, _ } from '../utils.js';
-const replace = $('replace');
+import { pipe, init, spaces, last, $$, _ } from '../utils.js';
+const [replace, split, reduce, map] = $$('replace', 'split', 'reduce', 'map');
 
 export const hasStyle = x => x !== stripAnsi(x);
 export const length = text => stripAnsi(text).length;
@@ -31,10 +31,10 @@ const match = reg => str => {
     return matches && matches[1];
 };
 
-const first = match(/^\s*(\S)/);
-const last = match(/(\S)\s*$/);
 
 export const isJSONLike = str => {
+    const first = match(/^\s*(\S)/);
+    const last = match(/(\S)\s*$/);
     const startBrackets = ['[', '{'];
     const endBrackets = { '[': ']', '{': '}' };
     return (
@@ -60,3 +60,23 @@ export const entryStyle = _(level => isLeaf => text =>
     ? underline(text)
     : text
 );
+
+export const wrapLine = _(max => indent => str => {
+    const separators = /[ /;:,.-]/g;
+    const match = str.match(separators);
+
+    return str
+        |> split(separators)
+        |> reduce((lines, word, i) => {
+            const latest = last(lines);
+            const len = length(word) + indent + length(latest) + 1;
+            const next = word + (match && match[i] || '');
+
+            return (len > max)
+                ? [...lines, next]
+                : [...init(lines), latest + next];
+        }, [''])
+        |> map(x => x.trimEnd())
+        |> map((x, i) => !i ? x : spaces(indent) + x)
+    ;
+});

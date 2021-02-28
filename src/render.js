@@ -6,7 +6,8 @@ import Report from './components/Report.js';
 import Summary from './components/Summary.js';
 import Failures from './components/Failures.js';
 import Log from './components/Log.js';
-import { id, pipe, wrapLine, indent, wrap, $$ } from './utils.js';
+import { id, pipe, indent, wrap, $$ } from './utils.js';
+import { wrapLine } from './looks/style.js';
 const [filter, join] = $$('filter', 'join');
 
 const layout = ({ width }) => pipe(
