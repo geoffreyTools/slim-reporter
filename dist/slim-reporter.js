@@ -431,7 +431,7 @@ const isJSONLike = str => {
   };
   return startBrackets.includes(first(str)) && endBrackets[first(str)] === last(str);
 };
-const syntaxColor = pipe(replace$1(/(\{|\}|\[|\])/g, colors.braces('$1')), replace$1(/( \d+)/g, colors.digit('$1')), replace$1(/( \w+:)/g, colors.default('$1')), replace$1(/,/g, colors.default(',')), colors.word);
+const syntaxColor = pipe(replace$1(/(\{|\}|\[|\])/g, colors.braces('$1')), replace$1(/( \d+)/g, colors.digit('$1')), replace$1(/( (?:\w+|"\w+"):)/g, colors.default('$1')), replace$1(/,/g, colors.default(',')), colors.word);
 const entryStyle = _(level => isLeaf => text => isLeaf ? text : level === 0 ? bold(text) : level === 1 ? underline(text) : text);
 const wrapLine = _(max => indent => str => {
   var _ref, _ref2, _ref3, _str;

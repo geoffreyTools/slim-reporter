@@ -46,7 +46,7 @@ export const isJSONLike = str => {
 export const syntaxColor = pipe(
     replace(/(\{|\}|\[|\])/g, colors.braces('$1')),
     replace(/( \d+)/g, colors.digit('$1')),
-    replace(/( \w+:)/g, colors.default('$1')),
+    replace(/( (?:\w+|"\w+"):)/g, colors.default('$1')),
     replace(/,/g, colors.default(',')),
     colors.word
 );
