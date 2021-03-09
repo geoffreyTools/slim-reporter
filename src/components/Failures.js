@@ -51,7 +51,12 @@ const DetailedFailure = (message, values, wrapLine) => {
         |> (x => '\n' + x)
     ;
 
-    return message + ':\n' + details;
+    const title = message
+        ? message + ':'
+        : Object.keys(values).join('\n')
+    ;
+
+    return [title, details].join('\n');
 }
 
 
