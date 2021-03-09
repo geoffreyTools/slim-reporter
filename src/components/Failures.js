@@ -85,26 +85,26 @@ const atInBanner = at =>
     : null
 ;
 
-const atInText = (indentation, wrapLine, at) =>
+const atInText = (indentation, wrapLine, width, at) =>
     at && multiline(at)
     ? `at:\n${
         at
         |> map(x => '- ' + x)
-        |> map(pipe(wrapLine(indentation), join('\n')))
+        |> map(pipe(wrapLine(width - '- '.length)(indentation), join('\n')))
         |> join('\n')
         |> indent(indentation)
       }\n`
     : null
 ;
 
-export default _(Entries => Title => wrapLine => indentation => map(
+export default _(Entries => Title => wrapLine => width => indentation => map(
     ({ result, entries }) => {
         const at = extractAt(result.diag);
         return [
             Title(bg.fail, bannerText(result.diag, atInBanner(at))),
             wrap('\n')(Entries(entries)),
-            atInText(indentation, wrapLine, at),
-            Failure(result.diag, wrapLine)
+            atInText(indentation, wrapLine, width, at),
+            Failure(result.diag, wrapLine(width))
         ].filter(id).join('\n')
     })
 );

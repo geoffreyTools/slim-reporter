@@ -26,7 +26,7 @@ const render = ({ width, indent, verbose }) => {
     return state => [
         verbose && Report($Entries, $Title, state.results),
         state.summary && [
-            Failures($Entries, $Title, $partialWrap, indent, state.failures),
+            Failures($Entries, $Title, wrapLine, width(), indent, state.failures),
             verbose && Log($Entries, $Title, state.logs),
             Summary($Title, state.summary)
         ],
