@@ -459,7 +459,7 @@ const formatEntry = (wrap, layout) => entry => {
   return _ref = (_ref2 = (_ref3 = (_entry$text = entry.text, entryStyle(entry.level, entry.isLeaf)(_entry$text)), wrap(entry.level)(_ref3)), map$3(layout(entry))(_ref2)), join$6('\n')(_ref);
 };
 
-var Entry = ((indent, wrapLine) => entry => {
+var EntryFactory = ((indent, wrapLine) => entry => {
   var _entry;
 
   const indentBy = n => spaces(n * indent);
@@ -477,7 +477,7 @@ const belongsToNextSuite = (groups, entry) => {
 };
 
 const groupBySuite = reduce((groups, entry) => empty(groups) ? [[entry]] : belongsToNextSuite(groups, entry) ? [...groups, [entry]] : [...init$1(groups), [...last$1(groups), entry]], []);
-var Entries = (Entry => pipe(groupBySuite, map$2(flatMap(Entry)), map$2(join$5('\n')), join$5('\n\n')));
+var EntriesFactory = (Entry => pipe(groupBySuite, map$2(flatMap(Entry)), map$2(join$5('\n')), join$5('\n\n')));
 
 const _title = (color, width, text = '') => {
   const w = Math.max(2, width - length(text));
@@ -485,7 +485,7 @@ const _title = (color, width, text = '') => {
   return color(space + text + space);
 };
 
-var Title = ((width, wrapLine) => _(color => text => {
+var TitleFactory = ((width, wrapLine) => _(color => text => {
   const render = text => _title(color, width(), text);
 
   return hasStyle(text) ? render(text) : wrapLine(width() - 1, 1, text).map(render).join('\n');
@@ -550,7 +550,8 @@ const DetailedFailure = (message, values, wrapLine) => {
   var _ref5, _ref6, _ref7, _ref8, _ref9, _ref10, _values2;
 
   const details = (_ref5 = (_ref6 = (_ref7 = (_ref8 = (_ref9 = (_ref10 = (_values2 = values, Object.values(_values2)), join$2('/n')(_ref10)), wrapLine(0)(_ref9)), join$2('/n')(_ref8)), indent$1(3)(_ref7)), syntaxColor(_ref6)), '\n' + _ref5);
-  return message + ':\n' + details;
+  const title = message ? message + ':' : Object.keys(values).join('\n');
+  return [title, details].join('\n');
 };
 
 const LaconicFailure = (message, wrapLine) => {
@@ -568,18 +569,18 @@ const Failure = ({
 
 const atInBanner = at => at && !multiline(at) ? `at ${coordOf(at[0])}` : null;
 
-const atInText = (indentation, wrapLine, at) => {
+const atInText = (indentation, wrapLine, width, at) => {
   var _ref11, _ref12, _ref13, _at;
 
-  return at && multiline(at) ? `at:\n${(_ref11 = (_ref12 = (_ref13 = (_at = at, map$1(x => '- ' + x)(_at)), map$1(pipe(wrapLine(indentation), join$2('\n')))(_ref13)), join$2('\n')(_ref12)), indent$1(indentation)(_ref11))}\n` : null;
+  return at && multiline(at) ? `at:\n${(_ref11 = (_ref12 = (_ref13 = (_at = at, map$1(x => '- ' + x)(_at)), map$1(pipe(wrapLine(width - '- '.length)(indentation), join$2('\n')))(_ref13)), join$2('\n')(_ref12)), indent$1(indentation)(_ref11))}\n` : null;
 };
 
-var Failures = _(Entries => Title => wrapLine => indentation => map$1(({
+var Failures = _(Entries => Title => wrapLine => width => indentation => map$1(({
   result,
   entries
 }) => {
   const at = extractAt(result.diag);
-  return [Title(bg.fail, bannerText(result.diag, atInBanner(at))), wrap('\n')(Entries(entries)), atInText(indentation, wrapLine, at), Failure(result.diag, wrapLine)].filter(id).join('\n');
+  return [Title(bg.fail, bannerText(result.diag, atInBanner(at))), wrap('\n')(Entries(entries)), atInText(indentation, wrapLine, width, at), Failure(result.diag, wrapLine(width))].filter(id).join('\n');
 }));
 
 const [map, join$1] = $$('map', 'join');
@@ -615,11 +616,10 @@ const render = ({
   indent,
   verbose
 }) => {
-  const $partialWrap = wrapLine(width());
-  const $Entry = Entry(indent, $partialWrap);
-  const $Entries = Entries($Entry);
-  const $Title = Title(width, wrapLine);
-  return state => [verbose && Report($Entries, $Title, state.results), state.summary && [Failures($Entries, $Title, $partialWrap, indent, state.failures), verbose && Log($Entries, $Title, state.logs), Summary($Title, state.summary)], !state.summary && Loading(state.elapsed)].flat(2);
+  const Entry = EntryFactory(indent, wrapLine(width()));
+  const Entries = EntriesFactory(Entry);
+  const Title = TitleFactory(width, wrapLine);
+  return state => [verbose && Report(Entries, Title, state.results), state.summary && [Failures(Entries, Title, wrapLine, width(), indent, state.failures), verbose && Log(Entries, Title, state.logs), Summary(Title, state.summary)], !state.summary && Loading(state.elapsed)].flat(2);
 };
 
 var render$1 = (options => state => {
